@@ -313,6 +313,8 @@ int main()
 	ourShader->setFloat("lightPoint.constant", light.constant);
 	ourShader->setFloat("lightPoint.linear", light.linear);
 	ourShader->setFloat("lightPoint.quadratic", light.quadratic);
+
+
 #pragma endregion 
 
 
