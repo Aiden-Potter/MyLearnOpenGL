@@ -5,59 +5,69 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Material.h"
 #include "learnopengl/Shader.h"
 #include "Camera.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "LightDirecional.h"
+#include "LightPoint.h"
+#pragma region LightDeclare
 
+//LightDirecional light = LightDirecional(glm::vec3(10.0f,10.0f,-5.0f),glm::vec3(glm::radians(45.0f),0,0));
+LightPoint light = LightPoint(glm::vec3(1.0f, 1.0f, -1.0f),
+	glm::vec3(glm::radians(45.0f), glm::radians(45.0f), 0),
+	glm::vec3(10.0f, 10.0f, 10.0f));
+#pragma endregion 
 
 #pragma region Model
 const float ScreenWidth = 800;
 const float ScreenHeight = 600;
 float mixValue = 0.2f;
 float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	// positions          // normals           // texture coords
+	   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+	   -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+	   -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+	   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+	   -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+	   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+	   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+	   -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+	   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+	   -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+	   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+	   -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+	   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 };
 
 
@@ -235,10 +245,13 @@ int main()
 
 
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -247,37 +260,59 @@ int main()
 
 
 #pragma region 材质
-	unsigned int texture1;
-	texture1 = LoadImageToGPU("container.jpg", GL_RGB, GL_RGB, 0);
+	//unsigned int texture1;
+	//texture1 = LoadImageToGPU("container.jpg", GL_RGB, GL_RGB, 0);
 
-	// 为当前绑定的纹理对象设置环绕、过滤方式
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//// 为当前绑定的纹理对象设置环绕、过滤方式
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	unsigned int texture2;
-	texture2 = LoadImageToGPU("awesomeface.png", GL_RGBA, GL_RGBA, 1);
+	//unsigned int texture2;
+	//texture2 = LoadImageToGPU("awesomeface.png", GL_RGBA, GL_RGBA, 1);
 
-	// 为当前绑定的纹理对象设置环绕、过滤方式
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//// 为当前绑定的纹理对象设置环绕、过滤方式
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+
 #pragma endregion
 
 
 
 #pragma region InitShader
 
-	Shader ourShader("LightVert.glsl", "LightFrag.glsl");
-	ourShader.use();
+	Shader* ourShader = new Shader("LightVert.glsl", "LightFrag.glsl");
+	ourShader->use();
 
 
-	ourShader.setVec3("ambientColor", 0.2f,0.1f ,0.0f );
-	ourShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-	ourShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	ourShader->setVec3("ambientColor", 0.6f,0.6f ,0.6f );
+	ourShader->setVec3("objectColor", 1.0f, 1.0f, 1.0f);
 
+
+
+	Material * mat = new Material(ourShader,
+		glm::vec3(0.3f, 0.3f, 0.3f),
+		LoadImageToGPU("container2.png", GL_RGBA, GL_RGBA, 0),
+		LoadImageToGPU("container2_specular.png", GL_RGBA, GL_RGBA, 1),
+		LoadImageToGPU("matrix.jpg", GL_RGB, GL_RGB, 2),
+		64.0f);
+	ourShader->setVec3("material.ambient", mat->ambient);
+	//ourShader->setVec3("material.diffuse", mat->diffuse);
+	ourShader->setInt("material.diffuse", 0); 
+	ourShader->setInt("material.specular", 1);
+	ourShader->setInt("material.emission", 2);
+	ourShader->setFloat("material.shininess", mat->shiness);
+	ourShader->setVec3("lightPosUniform", light.position);
+	ourShader->setVec3("lightDirection", light.direction);
+	ourShader->setVec3("lightColor", light.color);
+	ourShader->setFloat("lightPoint.constant", light.constant);
+	ourShader->setFloat("lightPoint.linear", light.linear);
+	ourShader->setFloat("lightPoint.quadratic", light.quadratic);
 #pragma endregion 
 
 
@@ -294,40 +329,40 @@ int main()
 
 
 
-		ourShader.setVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);
-		ourShader.setVec3("cameraPos", camera.Position.x, camera.Position.y, camera.Position.z);
+		//ourShader->setVec3("lightPos", light.position);
+		ourShader->setVec3("cameraPos", camera.Position.x, camera.Position.y, camera.Position.z);
 
 		float radius = 10.0f;
 		float camX = sin(glfwGetTime()) * radius;
 		float camZ = cos(glfwGetTime()) * radius;
 
-		ourShader.use();
+		ourShader->use();
 		glm::mat4 model;
 
-		ourShader.setMat4("model", model);
+		ourShader->setMat4("model", model);
 		glm::mat4 view;
 		view = camera.GetViewMatrix();
-		ourShader.setMat4("view", view);
+		ourShader->setMat4("view", view);
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
-		ourShader.setMat4("projection", projection);
+		ourShader->setMat4("projection", projection);
 
 
 
 		glBindVertexArray(VAOs[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		//for (unsigned int i = 0; i < 10; i++)
-		//{
-		//	glm::mat4 model;
-		//	model = glm::translate(model, cubePositions[i]);
-		//	float angle = 20.0f * i;
-		//	model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-		//	ourShader.setMat4("model", model);
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model;
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			ourShader->setMat4("model", model);
 
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
-		//}
-
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -335,7 +370,7 @@ int main()
 	}
 	glDeleteVertexArrays(3, VAOs);
 	glDeleteBuffers(3, VBOs);
-
+	delete ourShader;
 
 	glfwTerminate();
 

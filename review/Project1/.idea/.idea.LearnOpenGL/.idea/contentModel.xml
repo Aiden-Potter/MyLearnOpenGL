@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\mayerzi\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\mayerzi\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_LearnOpenGL.1478281004.00" t="ExcludeRecursive" />
+    <e p="E:\OpenGL\MyLearnOpenGL\myOpenGLResource\include" t="Include">
+      <e p="glad.c" t="Include" />
+    </e>
+    <e p="E:\OpenGL\MyLearnOpenGL\review\Project1" t="IncludeFlat">
+      <e p="FirstWindows" t="IncludeRecursive">
+        <e p="FirstWindows.vcxproj" t="IncludeRecursive" />
+        <e p="fragment.glsl" t="Include" />
+        <e p="Practice.cpp" t="Include" />
+        <e p="ShaderClassPractice.cpp" t="Include" />
+        <e p="Source.cpp" t="Include" />
+        <e p="Texture.cpp" t="Include" />
+        <e p="textureFrag.glsl" t="Include" />
+        <e p="textureVertex.glsl" t="Include" />
+        <e p="Transform.cpp" t="Include" />
+        <e p="transformFrag.frag" t="Include" />
+        <e p="transformVertex.vert" t="Include" />
+        <e p="vertex.glsl" t="Include" />
+        <e p="x64\Debug" t="ExcludeRecursive" />
+      </e>
+      <e p="LearnOpenGL.sln" t="IncludeFlat" />
+      <e p="Light" t="IncludeRecursive">
+        <e p="Light.vcxproj" t="IncludeRecursive" />
+        <e p="LightFrag.glsl" t="Include" />
+        <e p="LightVert.glsl" t="Include" />
+        <e p="Source.cpp" t="Include" />
+        <e p="x64\Debug" t="ExcludeRecursive" />
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Project1" t="IncludeRecursive">
+        <e p="Project1.vcxproj" t="IncludeRecursive" />
+        <e p="Shader.cpp" t="Include" />
+        <e p="Shader.h" t="Include" />
+        <e p="Source.cpp" t="Include" />
+        <e p="x64\Debug" t="ExcludeRecursive" />
+      </e>
+      <e p="x64\Debug" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
