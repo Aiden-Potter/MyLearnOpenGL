@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\OpenGL\MyLearnOpenGL\myOpenGLResource\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\OpenGL\MyLearnOpenGL\myOpenGLResource\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\myOpenGLResource\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\myOpenGLResource\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
