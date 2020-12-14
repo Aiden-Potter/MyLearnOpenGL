@@ -13,12 +13,13 @@
 
 #include "LightDirecional.h"
 #include "LightPoint.h"
+#include "LightSpot.h"
 #pragma region LightDeclare
 
 //LightDirecional light = LightDirecional(glm::vec3(10.0f,10.0f,-5.0f),glm::vec3(glm::radians(45.0f),0,0));
-LightPoint light = LightPoint(glm::vec3(1.0f, 1.0f, -1.0f),
-	glm::vec3(glm::radians(45.0f), glm::radians(45.0f), 0),
-	glm::vec3(10.0f, 10.0f, 10.0f));
+LightSpot light = LightSpot(glm::vec3(0.0f, 2.0f, 5.0f),
+	glm::vec3(glm::radians(180.0f), 0, 0),
+	glm::vec3(1.0f, 1.0f, 1.0f));
 #pragma endregion 
 
 #pragma region Model
@@ -78,18 +79,18 @@ float texCoords[] = {
 };
 
 glm::vec3 cubePositions[] = {
-	glm::vec3(0.0f,  0.0f,  0.0f),
-	glm::vec3(2.0f,  5.0f, -15.0f),
-	glm::vec3(-1.5f, -2.2f, -2.5f),
-	glm::vec3(-3.8f, -2.0f, -12.3f),
-	glm::vec3(2.4f, -0.4f, -3.5f),
-	glm::vec3(-1.7f,  3.0f, -7.5f),
-	glm::vec3(1.3f, -2.0f, -2.5f),
-	glm::vec3(1.5f,  2.0f, -2.5f),
-	glm::vec3(1.5f,  0.2f, -1.5f),
-	glm::vec3(-1.3f,  1.0f, -1.5f)
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(1.0f,  2.0f, -1.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-1.8f, -2.0f, -2.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -1.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
 };
-glm::vec3 lightPos = glm::vec3(10.0f, 10.0f, -5.0f);
+
 #pragma endregion
 
 #pragma region Input Declare
@@ -307,13 +308,15 @@ int main()
 	ourShader->setInt("material.specular", 1);
 	ourShader->setInt("material.emission", 2);
 	ourShader->setFloat("material.shininess", mat->shiness);
-	ourShader->setVec3("lightPosUniform", light.position);
-	ourShader->setVec3("lightDirection", light.direction);
-	ourShader->setVec3("lightColor", light.color);
-	ourShader->setFloat("lightPoint.constant", light.constant);
-	ourShader->setFloat("lightPoint.linear", light.linear);
-	ourShader->setFloat("lightPoint.quadratic", light.quadratic);
 
+	ourShader->setVec3("lightColor", light.color);
+
+	ourShader->setFloat("lightS.cosPhyInner", light.cosPhyInner);
+	ourShader->setFloat("lightS.cosPhyOutter", light.cosPhyOutter);
+	//ourShader->setFloat("lightPoint.constant", light.constant);
+	//ourShader->setFloat("lightPoint.linear", light.linear);
+	//ourShader->setFloat("lightPoint.quadratic", light.quadratic);
+	
 
 #pragma endregion 
 
@@ -349,7 +352,8 @@ int main()
 		projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
 		ourShader->setMat4("projection", projection);
 
-
+		ourShader->setVec3("lightPosUniform", light.position);
+		ourShader->setVec3("lightDirection", light.direction);
 
 		glBindVertexArray(VAOs[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -357,8 +361,8 @@ int main()
 		{
 			glm::mat4 model;
 			model = glm::translate(model, cubePositions[i]);
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			//float angle = 20.0f * i;
+			//model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			ourShader->setMat4("model", model);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);

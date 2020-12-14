@@ -19,6 +19,11 @@ struct LightPoint{
 	float quadratic;
 };
 
+struct LightSpot{
+	float cosPhyInner;
+	float cosPhyOutter;
+};
+uniform LightSpot lightS;
 uniform LightPoint lightPoint;
 uniform Material material;
 
@@ -50,6 +55,24 @@ void main()
 
 	vec3 ambient =  material.ambient * ambientColor * vec3(texture(material.diffuse, TexCoord));
 	vec3 emission = texture(material.emission,TexCoord).rgb;
-    vec3 result = ( ambient+(specColor+diffuse)*attenuation ) * objectColor;
+
+	float cosTheta = dot(normalize(FragPos-lightPosUniform),-1*normalize(lightDirection));
+	
+	float spotRatio;
+	if(cosTheta>lightS.cosPhyInner)
+	{
+		
+		spotRatio = 1.0;
+	}else if(cosTheta>lightS.cosPhyOutter)
+	{
+		spotRatio = (cosTheta-lightS.cosPhyOutter) / (lightS.cosPhyInner-lightS.cosPhyOutter);
+	}
+	else
+	{
+		spotRatio = 0;
+	}
+
+	vec3 result = ( ambient+(specColor+diffuse)*spotRatio ) * objectColor;
+    
     FragColor = vec4(result, 1.0);
 }
