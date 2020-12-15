@@ -11,6 +11,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "Mesh.h"
+#include "Model.h"
 #include "LightDirecional.h"
 #include "LightPoint.h"
 #include "LightSpot.h"
@@ -195,9 +197,12 @@ unsigned int LoadImageToGPU(const char* imagePath, GLint internalFormat, GLenum 
 
 
 
-int main()
+int main(int argc,char*argv[])
 {
-
+	std::cout << argv[0] << std::endl;
+	std::string exePath = argv[0];
+	std::string objPath = exePath.substr(0, exePath.find_last_of("\\")) + "\\model\\nanosuit.obj";
+	std::cout << objPath  << std::endl;
 #pragma region OpenWindows
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -231,31 +236,34 @@ int main()
 
 
 #pragma region VAO VBO
-	unsigned int VBOs[3];
-	glGenBuffers(3, VBOs);
+
+	
+
+	//unsigned int VBOs[3];
+	//glGenBuffers(3, VBOs);
 
 
-	unsigned int VAOs[3];
-	glGenVertexArrays(3, VAOs);
-	// Bind VAO
-	glBindVertexArray(VAOs[0]);
+	//unsigned int VAOs[3];
+	//glGenVertexArrays(3, VAOs);
+	//// Bind VAO
+	//glBindVertexArray(VAOs[0]);
 
-	// Operating Buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+	//// Operating Buffer
+	//glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
+
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	//glEnableVertexAttribArray(2);
+
+
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 #pragma endregion
 
@@ -282,8 +290,8 @@ int main()
 
 
 #pragma endregion
-
-
+	//Mesh mesh(vertices);
+	Model objModel(objPath);
 
 #pragma region InitShader
 
@@ -318,6 +326,7 @@ int main()
 	//ourShader->setFloat("lightPoint.quadratic", light.quadratic);
 	
 
+
 #pragma endregion 
 
 
@@ -332,18 +341,11 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-
-
 		//ourShader->setVec3("lightPos", light.position);
 		ourShader->setVec3("cameraPos", camera.Position.x, camera.Position.y, camera.Position.z);
 
-		float radius = 10.0f;
-		float camX = sin(glfwGetTime()) * radius;
-		float camZ = cos(glfwGetTime()) * radius;
-
 		ourShader->use();
 		glm::mat4 model;
-
 		ourShader->setMat4("model", model);
 		glm::mat4 view;
 		view = camera.GetViewMatrix();
@@ -354,19 +356,20 @@ int main()
 
 		ourShader->setVec3("lightPosUniform", light.position);
 		ourShader->setVec3("lightDirection", light.direction);
+		objModel.Draw(mat->shader);
+		//mesh.Draw(ourShader);
+		//glBindVertexArray(VAOs[0]);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		//for (unsigned int i = 0; i < 10; i++)
+		//{
+		//	glm::mat4 model;
+		//	model = glm::translate(model, cubePositions[i]);
+		//	//float angle = 20.0f * i;
+		//	//model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+		//	ourShader->setMat4("model", model);
 
-		glBindVertexArray(VAOs[0]);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		for (unsigned int i = 0; i < 10; i++)
-		{
-			glm::mat4 model;
-			model = glm::translate(model, cubePositions[i]);
-			//float angle = 20.0f * i;
-			//model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			ourShader->setMat4("model", model);
-
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		//	glDrawArrays(GL_TRIANGLES, 0, 36);
+		//}
 
 		
 
@@ -374,8 +377,8 @@ int main()
 		glfwPollEvents();
 
 	}
-	glDeleteVertexArrays(3, VAOs);
-	glDeleteBuffers(3, VBOs);
+	//glDeleteVertexArrays(3, VAOs);
+	//glDeleteBuffers(3, VBOs);
 	delete ourShader;
 
 	glfwTerminate();

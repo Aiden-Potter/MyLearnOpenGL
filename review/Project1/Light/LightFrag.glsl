@@ -71,7 +71,7 @@ void main()
 	{
 		spotRatio = 0;
 	}
-
+	spotRatio = 1;
 	vec3 result = ( ambient+(specColor+diffuse)*spotRatio ) * objectColor;
     
     FragColor = vec4(result, 1.0);
