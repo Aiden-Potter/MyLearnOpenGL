@@ -163,6 +163,8 @@
   <ItemGroup>
     <None Include="LightFrag.glsl" />
     <None Include="LightVert.glsl" />
+    <None Include="ObjFrag.glsl" />
+    <None Include="ObjVert.glsl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

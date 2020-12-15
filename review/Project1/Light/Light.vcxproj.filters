@@ -48,6 +48,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="ObjVert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ObjFrag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Material.h">

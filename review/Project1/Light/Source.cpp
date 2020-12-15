@@ -295,32 +295,32 @@ int main(int argc,char*argv[])
 
 #pragma region InitShader
 
-	Shader* ourShader = new Shader("LightVert.glsl", "LightFrag.glsl");
+	Shader* ourShader = new Shader("ObjVert.glsl", "ObjFrag.glsl");
 	ourShader->use();
 
 
-	ourShader->setVec3("ambientColor", 0.6f,0.6f ,0.6f );
-	ourShader->setVec3("objectColor", 1.0f, 1.0f, 1.0f);
+	//ourShader->setVec3("ambientColor", 0.6f,0.6f ,0.6f );
+	//ourShader->setVec3("objectColor", 1.0f, 1.0f, 1.0f);
 
 
 
-	Material * mat = new Material(ourShader,
+	/*Material * mat = new Material(ourShader,
 		glm::vec3(0.3f, 0.3f, 0.3f),
 		LoadImageToGPU("container2.png", GL_RGBA, GL_RGBA, 0),
 		LoadImageToGPU("container2_specular.png", GL_RGBA, GL_RGBA, 1),
 		LoadImageToGPU("matrix.jpg", GL_RGB, GL_RGB, 2),
-		64.0f);
-	ourShader->setVec3("material.ambient", mat->ambient);
-	//ourShader->setVec3("material.diffuse", mat->diffuse);
-	ourShader->setInt("material.diffuse", 0); 
-	ourShader->setInt("material.specular", 1);
-	ourShader->setInt("material.emission", 2);
-	ourShader->setFloat("material.shininess", mat->shiness);
+		64.0f);*/
+	//ourShader->setVec3("material.ambient", mat->ambient);
+	////ourShader->setVec3("material.diffuse", mat->diffuse);
+	//ourShader->setInt("material.diffuse", 0); 
+	//ourShader->setInt("material.specular", 1);
+	//ourShader->setInt("material.emission", 2);
+	//ourShader->setFloat("material.shininess", mat->shiness);
 
-	ourShader->setVec3("lightColor", light.color);
+	//ourShader->setVec3("lightColor", light.color);
 
-	ourShader->setFloat("lightS.cosPhyInner", light.cosPhyInner);
-	ourShader->setFloat("lightS.cosPhyOutter", light.cosPhyOutter);
+	//ourShader->setFloat("lightS.cosPhyInner", light.cosPhyInner);
+	//ourShader->setFloat("lightS.cosPhyOutter", light.cosPhyOutter);
 	//ourShader->setFloat("lightPoint.constant", light.constant);
 	//ourShader->setFloat("lightPoint.linear", light.linear);
 	//ourShader->setFloat("lightPoint.quadratic", light.quadratic);
@@ -342,7 +342,7 @@ int main(int argc,char*argv[])
 		lastFrame = currentFrame;
 
 		//ourShader->setVec3("lightPos", light.position);
-		ourShader->setVec3("cameraPos", camera.Position.x, camera.Position.y, camera.Position.z);
+		//ourShader->setVec3("cameraPos", camera.Position.x, camera.Position.y, camera.Position.z);
 
 		ourShader->use();
 		glm::mat4 model;
@@ -354,9 +354,9 @@ int main(int argc,char*argv[])
 		projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
 		ourShader->setMat4("projection", projection);
 
-		ourShader->setVec3("lightPosUniform", light.position);
-		ourShader->setVec3("lightDirection", light.direction);
-		objModel.Draw(mat->shader);
+		//ourShader->setVec3("lightPosUniform", light.position);
+		//ourShader->setVec3("lightDirection", light.direction);
+		objModel.Draw(ourShader);
 		//mesh.Draw(ourShader);
 		//glBindVertexArray(VAOs[0]);
 		//glDrawArrays(GL_TRIANGLES, 0, 36);
